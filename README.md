@@ -100,7 +100,7 @@ Registration requires administrator privileges; widget users must have permissio
 
 When a custom widget is registered in ArcGIS Enterprise Portal, Experience Builder may resolve `props.context.folderUrl` against its own CDN rather than the external web server hosting the widget. In this situation, PDF.js can attempt to load its worker from an incorrect Portal path and fail with `Setting up fake worker failed`.
 
-Open the **GeoPDF widget settings** in the Portal Experience Builder editor. In **Widget deployment URL (optional)** (shown in Italian as **URL pubblicazione widget (opzionale)**), enter the HTTPS **base folder containing the hosted `manifest.json`**, ending with a slash.
+Open the **GeoPDF widget settings** in the Portal Experience Builder editor. In **Widget deployment URL (optional)**, enter the HTTPS **base folder containing the hosted `manifest.json`**, ending with a slash.
 
 Example deployment:
 
@@ -159,7 +159,7 @@ In Experience Builder:
 
 1. Add a **Map** widget to the page.
 2. Add the **GeoPDF** widget.
-3. Open GeoPDF settings and select the Map widget. For an externally hosted Portal deployment, optionally set **URL pubblicazione widget (opzionale)** to the HTTPS folder containing `manifest.json`.
+3. Open GeoPDF settings and select the Map widget. For an externally hosted Portal deployment, optionally set **Widget deployment URL (optional)** to the HTTPS folder containing `manifest.json`.
 4. Preview or run the application.
 5. Select a supported geospatial PDF and use the visibility and opacity controls.
 
@@ -222,7 +222,7 @@ Verify that the worker request returns **HTTP 200** with a JavaScript-compatible
 | Issue | Check |
 | --- | --- |
 | The widget asks for a map | Select an Experience Builder Map widget in GeoPDF settings. |
-| PDF.js worker returns 404 | Verify the deployed `dist/runtime/assets/pdf.worker.min.js` path and the requested URL in browser DevTools. In Portal, set **URL pubblicazione widget (opzionale)** to the externally hosted widget folder containing `manifest.json`. |
+| PDF.js worker returns 404 | Verify the deployed `dist/runtime/assets/pdf.worker.min.js` path and the requested URL in browser DevTools. In Portal, set **Widget deployment URL (optional)** to the externally hosted widget folder containing `manifest.json`. |
 | `Setting up fake worker failed` and a Portal CDN worker URL | In GeoPDF settings, configure the external HTTPS widget deployment URL; verify the worker is accessible on that host. |
 | JavaScript chunk loading fails with a Portal CDN 404 | Rebuild and deploy the complete production output, including any generated chunks; PDF.js is imported statically to avoid its dynamic import chunk. Verify the Network requests. |
 | `System is not defined` | Use the standalone PDF.js worker, not a SystemJS-bundled worker. |
