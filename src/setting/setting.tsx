@@ -49,7 +49,7 @@ const Setting = (props: AllWidgetSettingProps<IMConfig>) => {
         <SettingRow>
           <div style={fieldContainerStyle}>
             <label htmlFor="geopdf-widget-base-url" style={{ display: 'block', fontWeight: 500, marginBottom: 6 }}>
-              URL pubblicazione widget (opzionale)
+              {translate('widgetBaseUrlLabel')}
             </label>
             <input
               id="geopdf-widget-base-url"
@@ -60,7 +60,7 @@ const Setting = (props: AllWidgetSettingProps<IMConfig>) => {
               style={{ width: '100%' }}
             />
             <div style={{ marginTop: 'var(--sys-spacing-1)' }}>
-              Indicare la cartella IIS contenente manifest.json. Lasciare vuoto per utilizzare il percorso standard di Experience Builder.
+              {translate('widgetBaseUrlHint')}
             </div>
           </div>
         </SettingRow>
