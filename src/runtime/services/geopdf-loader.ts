@@ -1,3 +1,4 @@
+import * as pdfjs from 'pdfjs-dist/legacy/build/pdf'
 import MediaLayer from 'esri/layers/MediaLayer'
 import ImageElement from 'esri/layers/support/ImageElement'
 import Point from 'esri/geometry/Point'
@@ -121,7 +122,6 @@ const renderFirstPageToImage = async (bytes: Uint8Array, workerUrl: string): Pro
   // webpack entry emits a System.register worker chunk, which cannot execute in
   // a standalone Web Worker ("System is not defined"). Load the original PDF.js
   // worker as a static asset instead, matching pdfjs-dist 3.11.174.
-  const pdfjs = await import('pdfjs-dist/legacy/build/pdf')
   pdfjs.GlobalWorkerOptions.workerSrc = workerUrl
   const loadingTask = pdfjs.getDocument({
     data: bytes
