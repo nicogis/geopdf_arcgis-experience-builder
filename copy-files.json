@@ -1,0 +1,6 @@
+[
+  {
+    "from": "../../../node_modules/pdfjs-dist/build/pdf.worker.min.js",
+    "to": "dist/runtime/assets/pdf.worker.min.js"
+  }
+]

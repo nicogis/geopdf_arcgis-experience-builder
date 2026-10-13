@@ -1,0 +1,27 @@
+{
+  "name": "geoPdf",
+  "label": "GeoPdf",
+  "type": "widget",
+  "version": "1.0.0",
+  "exbVersion": "1.17.0",
+  "author": "NicoGIS",
+  "description": "Initial scaffold for a GeoPDF widget with map binding and local file upload placeholder.",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "dependency": [
+    "jimu-arcgis"
+  ],
+  "properties": {},
+  "translatedLocales": [
+    "en",
+    "it",
+    "de",
+    "es",
+    "fr",
+    "zh-cn"
+  ],
+  "defaultSize": {
+    "width": 420,
+    "height": 460
+  }
+}

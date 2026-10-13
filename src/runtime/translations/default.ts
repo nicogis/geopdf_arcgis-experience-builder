@@ -1,0 +1,21 @@
+export default {
+  _widgetLabel: 'GeoPdf',
+  mapConnected: 'Map widget connected',
+  mapNotConnected: 'Map widget not connected',
+  selectMapInSetting: 'Select a Map widget in settings to enable map integration.',
+  uploadTitle: 'Upload local GeoPDF',
+  uploadDescription: 'Choose a local GeoPDF file to prepare client-side processing.',
+  fileInputLabel: 'GeoPDF file',
+  noFileSelected: 'No file selected',
+  selectedFile: 'Selected file: {fileName}',
+  statusIdle: 'Ready to load a geospatial PDF.',
+  statusNoFile: 'No file selected.',
+  statusMapRequired: 'Connect a Map widget before loading a GeoPDF.',
+  statusLoading: 'Rendering and georeferencing GeoPDF...',
+  statusLoaded: 'GeoPDF loaded and georeferenced on the map.',
+  statusUnknownError: 'Unknown error',
+  statusLoadError: 'Unable to load GeoPDF: {details}',
+  layerControlsTitle: 'Layer controls',
+  layerVisibility: 'Visible',
+  layerOpacity: 'Opacity'
+}

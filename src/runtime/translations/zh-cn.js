@@ -1,0 +1,21 @@
+System.register([], function (_export) {return {execute: function () {_export({
+  "_widgetLabel": "GeoPdf",
+  "mapConnected": "地图微件已连接",
+  "mapNotConnected": "地图微件未连接",
+  "selectMapInSetting": "请在设置中选择地图微件以启用地图集成。",
+  "uploadTitle": "上传本地 GeoPDF",
+  "uploadDescription": "选择本地 GeoPDF 文件以在浏览器中处理。",
+  "fileInputLabel": "GeoPDF 文件",
+  "noFileSelected": "未选择文件",
+  "selectedFile": "已选择文件：{fileName}",
+  "statusIdle": "已准备好加载地理空间 PDF。",
+  "statusNoFile": "未选择文件。",
+  "statusMapRequired": "加载 GeoPDF 前请先连接地图微件。",
+  "statusLoading": "正在渲染 GeoPDF 并进行地理配准...",
+  "statusLoaded": "GeoPDF 已加载并在地图上完成地理配准。",
+  "statusUnknownError": "未知错误",
+  "statusLoadError": "无法加载 GeoPDF：{details}",
+  "layerControlsTitle": "图层控制",
+  "layerVisibility": "可见",
+  "layerOpacity": "不透明度"
+})}}});

@@ -1,0 +1,21 @@
+System.register([], function (_export) {return {execute: function () {_export({
+  "_widgetLabel": "GeoPdf",
+  "mapConnected": "Widget Carte connecté",
+  "mapNotConnected": "Widget Carte non connecté",
+  "selectMapInSetting": "Sélectionnez un widget Carte dans les paramètres pour activer l’intégration.",
+  "uploadTitle": "Importer un GeoPDF local",
+  "uploadDescription": "Choisissez un fichier GeoPDF local à traiter dans le navigateur.",
+  "fileInputLabel": "Fichier GeoPDF",
+  "noFileSelected": "Aucun fichier sélectionné",
+  "selectedFile": "Fichier sélectionné : {fileName}",
+  "statusIdle": "Prêt à charger un PDF géospatial.",
+  "statusNoFile": "Aucun fichier sélectionné.",
+  "statusMapRequired": "Connectez un widget Carte avant de charger un GeoPDF.",
+  "statusLoading": "Rendu et géoréférencement du GeoPDF en cours...",
+  "statusLoaded": "GeoPDF chargé et géoréférencé sur la carte.",
+  "statusUnknownError": "Erreur inconnue",
+  "statusLoadError": "Impossible de charger le GeoPDF : {details}",
+  "layerControlsTitle": "Contrôles de couche",
+  "layerVisibility": "Visible",
+  "layerOpacity": "Opacité"
+})}}});
