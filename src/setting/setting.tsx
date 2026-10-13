@@ -19,6 +19,13 @@ const Setting = (props: AllWidgetSettingProps<IMConfig>) => {
     })
   }, [props])
 
+  const onWidgetBaseUrlChange = React.useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
+    props.onSettingChange({
+      id: props.id,
+      config: props.config.set('widgetBaseUrl', evt.currentTarget.value)
+    })
+  }, [props])
+
   return (
     <div className="widget-setting-geo-pdf p-2" style={{ width: '100%' }}>
       <div style={{ fontWeight: 600, margin: '12px 0 8px 0' }}>{translate('mapSectionTitle')}</div>
@@ -34,6 +41,26 @@ const Setting = (props: AllWidgetSettingProps<IMConfig>) => {
             />
             <div style={{ marginTop: 'var(--sys-spacing-1)' }}>
               {translate('mapSelectorHint')}
+            </div>
+          </div>
+        </SettingRow>
+      </SettingSection>
+      <SettingSection>
+        <SettingRow>
+          <div style={fieldContainerStyle}>
+            <label htmlFor="geopdf-widget-base-url" style={{ display: 'block', fontWeight: 500, marginBottom: 6 }}>
+              URL pubblicazione widget (opzionale)
+            </label>
+            <input
+              id="geopdf-widget-base-url"
+              type="url"
+              value={props.config.widgetBaseUrl ?? ''}
+              onChange={onWidgetBaseUrlChange}
+              placeholder="https://example.com/widget/geopdf/"
+              style={{ width: '100%' }}
+            />
+            <div style={{ marginTop: 'var(--sys-spacing-1)' }}>
+              Indicare la cartella IIS contenente manifest.json. Lasciare vuoto per utilizzare il percorso standard di Experience Builder.
             </div>
           </div>
         </SettingRow>
