@@ -96,7 +96,25 @@ A **Portal administrator** must register the widget:
 
 Registration requires administrator privileges; widget users must have permission to access the registered Portal item. If the widget is used in a public experience, verify anonymous accessibility and appropriate item sharing.
 
-### 4. Validate and update
+### 4. Configure the published widget URL in Portal
+
+When a custom widget is registered in ArcGIS Enterprise Portal, Experience Builder may resolve `props.context.folderUrl` against its own CDN rather than the external web server hosting the widget. In this situation, PDF.js can attempt to load its worker from an incorrect Portal path and fail with `Setting up fake worker failed`.
+
+Open the **GeoPDF widget settings** in the Portal Experience Builder editor. In **Widget deployment URL (optional)** (shown in Italian as **URL pubblicazione widget (opzionale)**), enter the HTTPS **base folder containing the hosted `manifest.json`**, ending with a slash.
+
+Example deployment:
+
+```text
+Manifest: https://widgets.example.org/widget/geopdf/manifest.json
+Widget deployment URL: https://widgets.example.org/widget/geopdf/
+PDF.js worker: https://widgets.example.org/widget/geopdf/dist/runtime/assets/pdf.worker.min.js
+```
+
+Do **not** enter the Portal homepage, Portal item URL, or `manifest.json` file URL in this field. The configured base URL is used only to resolve the PDF.js worker asset; it does not change the Portal widget registration URL.
+
+Leave this field **empty** for local development or whenever Experience Builder correctly supplies the widget folder URL. Save and publish the Experience after changing the setting. Verify in browser DevTools → Network that `pdf.worker.min.js` is requested from the external widget host and returns **HTTP 200**.
+
+### 5. Validate and update
 
 Add a Map widget, bind GeoPDF to it, and test a supported Adobe geospatial PDF. Verify that the overlay is correctly positioned, that visibility and opacity work, and that the browser Network/Console tabs show no worker, CORS, MIME-type, or chunk-loading errors.
 
@@ -141,7 +159,7 @@ In Experience Builder:
 
 1. Add a **Map** widget to the page.
 2. Add the **GeoPDF** widget.
-3. Open GeoPDF settings and select the Map widget.
+3. Open GeoPDF settings and select the Map widget. For an externally hosted Portal deployment, optionally set **URL pubblicazione widget (opzionale)** to the HTTPS folder containing `manifest.json`.
 4. Preview or run the application.
 5. Select a supported geospatial PDF and use the visibility and opacity controls.
 
@@ -162,7 +180,7 @@ Experience Builder Developer Edition **1.13 and later** supports a widget-level 
 
 The paths are relative to the widget root at `client/your-extensions/widgets/geoPdf`. This expects `pdfjs-dist@3.11.174` to be installed in the Experience Builder `client/node_modules` directory.
 
-No PowerShell watcher or manual copying into generated build folders is required. The widget obtains its hosted base URL from Experience Builder's `props.context.folderUrl` and loads the worker from:
+No PowerShell watcher or manual copying into generated build folders is required. By default, the widget obtains its hosted base URL from Experience Builder's `props.context.folderUrl`. When the optional **widget deployment URL** setting is populated, it overrides that base URL for the PDF.js worker. The worker is loaded from:
 
 ```text
 <widget-folder-url>/dist/runtime/assets/pdf.worker.min.js
@@ -190,7 +208,7 @@ geoPdf/
 
 Other generated files may be present; keep the full compiled directory intact. For deployment, use the **production build** supported by the target Experience Builder Developer Edition and check the generated output before publishing.
 
-The worker is loaded relative to the widget's URL supplied by Experience Builder, so the hosting site can use a virtual directory. For example:
+The worker is loaded relative to the configured widget deployment URL, or by default relative to the widget folder URL supplied by Experience Builder, so the hosting site can use a virtual directory. For example:
 
 ```text
 https://example.org/widgets/geoPdf/dist/runtime/widget.js
@@ -204,7 +222,9 @@ Verify that the worker request returns **HTTP 200** with a JavaScript-compatible
 | Issue | Check |
 | --- | --- |
 | The widget asks for a map | Select an Experience Builder Map widget in GeoPDF settings. |
-| PDF.js worker returns 404 | Verify the deployed `dist/runtime/assets/pdf.worker.min.js` path and the requested URL in browser DevTools. |
+| PDF.js worker returns 404 | Verify the deployed `dist/runtime/assets/pdf.worker.min.js` path and the requested URL in browser DevTools. In Portal, set **URL pubblicazione widget (opzionale)** to the externally hosted widget folder containing `manifest.json`. |
+| `Setting up fake worker failed` and a Portal CDN worker URL | In GeoPDF settings, configure the external HTTPS widget deployment URL; verify the worker is accessible on that host. |
+| JavaScript chunk loading fails with a Portal CDN 404 | Rebuild and deploy the complete production output, including any generated chunks; PDF.js is imported statically to avoid its dynamic import chunk. Verify the Network requests. |
 | `System is not defined` | Use the standalone PDF.js worker, not a SystemJS-bundled worker. |
 | GeoPDF metadata not found | Check that the PDF contains supported Adobe `/GPTS` and `/LPTS` metadata. |
 | Worker missing after compilation | Verify `copy-files.json`, the installed PDF.js package, and the compiler output. |
