@@ -5,7 +5,7 @@
   "version": "1.0.0",
   "exbVersion": "1.17.0",
   "author": "NicoGIS",
-  "description": "Initial scaffold for a GeoPDF widget with map binding and local file upload placeholder.",
+  "description": "GeoPDF widget for ArcGIS Experience Builder. Load and overlay georeferenced PDF maps directly in the browser without server-side processing.",
   "copyright": "",
   "license": "http://www.apache.org/licenses/LICENSE-2.0",
   "dependency": [
