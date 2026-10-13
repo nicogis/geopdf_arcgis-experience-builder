@@ -55,7 +55,11 @@ const Widget = (props: AllWidgetProps<IMConfig>) => {
       setStatusMessage(translate('statusLoading'))
 
       removeCurrentGeoPdfLayer()
-      const workerUrl = new URL('dist/runtime/assets/pdf.worker.min.js', props.context.folderUrl).href
+      const configuredBaseUrl = props.config.widgetBaseUrl?.trim()
+      const baseUrl = configuredBaseUrl
+        ? new URL(configuredBaseUrl.endsWith('/') ? configuredBaseUrl : configuredBaseUrl + '/', window.location.href).href
+        : props.context.folderUrl
+      const workerUrl = new URL('dist/runtime/assets/pdf.worker.min.js', baseUrl).href
       const result = await loadGeoPdfAsMediaLayer(file, workerUrl)
 
       geoPdfLayerRef.current = result.layer
@@ -72,7 +76,7 @@ const Widget = (props: AllWidgetProps<IMConfig>) => {
       setIsLoading(false)
       evt.target.value = ''
     }
-  }, [layerOpacity, layerVisible, removeCurrentGeoPdfLayer, props.context.folderUrl, translate])
+  }, [layerOpacity, layerVisible, removeCurrentGeoPdfLayer, props.context.folderUrl, props.config.widgetBaseUrl, translate])
 
   const onActiveViewChange = React.useCallback((jimuMapView: JimuMapView) => {
     jimuMapViewRef.current = jimuMapView ?? null
