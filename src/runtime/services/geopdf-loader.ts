@@ -4,6 +4,15 @@ import ImageElement from 'esri/layers/support/ImageElement'
 import Point from 'esri/geometry/Point'
 import Extent from 'esri/geometry/Extent'
 
+export type GeoPdfErrorCode = 'metadataMissing' | 'metadataMismatch' | 'insufficientControlPoints' | 'canvasUnavailable' | 'canvasLimit' | 'unsupportedResolution'
+
+export class GeoPdfError extends Error {
+  constructor(public readonly code: GeoPdfErrorCode) {
+    super(code)
+    this.name = 'GeoPdfError'
+  }
+}
+
 type PixelPoint = { x: number, y: number }
 type GeoPoint = { lon: number, lat: number }
 
@@ -74,11 +83,11 @@ const extractGeoreference = (pdfText: string, width: number, height: number): Ge
   const lptsRaw = getArrayFromPdfText(pdfText, 'LPTS')
 
   if (gptsRaw.length < 6 || lptsRaw.length < 6) {
-    throw new Error('GeoPDF metadata not found. Expected GPTS/LPTS arrays in Adobe geospatial PDF.')
+    throw new GeoPdfError('metadataMissing')
   }
 
   if (gptsRaw.length !== lptsRaw.length) {
-    throw new Error('Invalid GeoPDF metadata. GPTS/LPTS arrays have different lengths.')
+    throw new GeoPdfError('metadataMismatch')
   }
 
   const lptPairs = parsePairs(lptsRaw)
@@ -86,7 +95,7 @@ const extractGeoreference = (pdfText: string, width: number, height: number): Ge
 
   const pairedCount = Math.min(4, lptPairs.length, gptPairs.length)
   if (pairedCount < 3) {
-    throw new Error('GeoPDF metadata has insufficient control points.')
+    throw new GeoPdfError('insufficientControlPoints')
   }
 
   const controlPoints: GeoPdfControlPoint[] = []
@@ -140,7 +149,7 @@ const renderFirstPageToImage = async (bytes: Uint8Array, workerUrl: string, maxS
 
   const context = canvas.getContext('2d')
   if (!context) {
-    throw new Error('Unable to create canvas context for PDF rendering.')
+    throw new GeoPdfError('canvasUnavailable')
   }
 
   await page.render({
@@ -149,7 +158,7 @@ const renderFirstPageToImage = async (bytes: Uint8Array, workerUrl: string, maxS
   }).promise
 
   const imageDataUrl = canvas.toDataURL('image/png')
-  if (imageDataUrl === 'data:,') throw new Error('Canvas limit exceeded. Select a lower resolution.')
+  if (imageDataUrl === 'data:,') throw new GeoPdfError('canvasLimit')
   return {
     imageDataUrl,
     width: canvas.width,
@@ -162,7 +171,7 @@ export const loadGeoPdfAsMediaLayer = async (file: File, workerUrl: string, maxS
   const bytes = new Uint8Array(buffer)
   const pdfText = new TextDecoder('latin1').decode(bytes)
 
-  if (![2048, 4096, 8192].includes(maxSize)) throw new Error('Unsupported rendering resolution.')
+  if (![2048, 4096, 8192].includes(maxSize)) throw new GeoPdfError('unsupportedResolution')
   const renderResult = await renderFirstPageToImage(bytes, workerUrl, maxSize)
   const georefResult = extractGeoreference(pdfText, renderResult.width, renderResult.height)
 
