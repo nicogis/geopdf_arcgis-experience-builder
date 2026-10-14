@@ -10,7 +10,7 @@ The widget uses PDF.js for browser-side PDF rendering and the ArcGIS Maps SDK fo
 
 - Load a local geospatial PDF through the browser.
 - Connect to an Experience Builder Map widget.
-- Render the first page of a PDF using PDF.js.
+- Render the first page of a PDF using PDF.js, with configurable maximum image dimensions of 2048, 4096, or 8192 pixels (4096 by default).
 - Extract Adobe geospatial PDF `/GPTS` and `/LPTS` control-point metadata.
 - Display the georeferenced page as a map overlay using `MediaLayer` and `ImageElement`.
 - Zoom to the imported overlay.
@@ -130,7 +130,7 @@ The current implementation targets **Adobe geospatial PDFs** containing `/GPTS` 
 
 - **First page only**: multi-page navigation is not implemented.
 - **Georeferencing**: control points are read from the PDF and used to place the rendered image; results depend on the source document's metadata and coordinate system.
-- **Rendering resolution**: the page is rendered to an image with a maximum dimension of 2,048 pixels.
+- **Rendering resolution**: configurable maximum dimension of 2,048, 4,096, or 8,192 pixels; 4,096 is the default. Rendering may upscale the PDF page beyond its native PDF.js viewport dimensions. Higher settings consume significantly more browser memory and may exceed canvas or GPU limits; reduce the setting if rendering fails. This remains a single raster overlay, not vector rendering or zoom-dependent tiling.
 - **No server-side upload**: the selected PDF is processed in the browser.
 - **No persistent overlay storage**: the imported layer belongs to the current application session.
 - PDF documents without supported geospatial metadata cannot be positioned automatically.
@@ -159,7 +159,7 @@ In Experience Builder:
 
 1. Add a **Map** widget to the page.
 2. Add the **GeoPDF** widget.
-3. Open GeoPDF settings and select the Map widget. For an externally hosted Portal deployment, optionally set **Widget deployment URL (optional)** to the HTTPS folder containing `manifest.json`.
+3. Open GeoPDF settings, select the Map widget, and choose the PDF rendering resolution (2048, 4096, or 8192 px). For an externally hosted Portal deployment, optionally set **Widget deployment URL (optional)** to the HTTPS folder containing `manifest.json`.
 4. Preview or run the application.
 5. Select a supported geospatial PDF and use the visibility and opacity controls.
 
