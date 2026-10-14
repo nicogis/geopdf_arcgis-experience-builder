@@ -60,7 +60,7 @@ const Widget = (props: AllWidgetProps<IMConfig>) => {
         ? new URL(configuredBaseUrl.endsWith('/') ? configuredBaseUrl : configuredBaseUrl + '/', window.location.href).href
         : props.context.folderUrl
       const workerUrl = new URL('dist/runtime/assets/pdf.worker.min.js', baseUrl).href
-      const result = await loadGeoPdfAsMediaLayer(file, workerUrl)
+      const result = await loadGeoPdfAsMediaLayer(file, workerUrl, props.config.renderMaxSize ?? 4096)
 
       geoPdfLayerRef.current = result.layer
       result.layer.visible = layerVisible
@@ -76,7 +76,7 @@ const Widget = (props: AllWidgetProps<IMConfig>) => {
       setIsLoading(false)
       evt.target.value = ''
     }
-  }, [layerOpacity, layerVisible, removeCurrentGeoPdfLayer, props.context.folderUrl, props.config.widgetBaseUrl, translate])
+  }, [layerOpacity, layerVisible, removeCurrentGeoPdfLayer, props.context.folderUrl, props.config.widgetBaseUrl, props.config.renderMaxSize, translate])
 
   const onActiveViewChange = React.useCallback((jimuMapView: JimuMapView) => {
     jimuMapViewRef.current = jimuMapView ?? null
