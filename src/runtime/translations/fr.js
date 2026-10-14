@@ -17,5 +17,11 @@ System.register([], function (_export) {return {execute: function () {_export({
   "statusLoadError": "Impossible de charger le GeoPDF : {details}",
   "layerControlsTitle": "Contrôles de couche",
   "layerVisibility": "Visible",
-  "layerOpacity": "Opacité"
+  "layerOpacity": "Opacité",
+  "geoPdfError_metadataMissing": "Métadonnées GeoPDF introuvables. Les tableaux GPTS/LPTS d’un PDF géospatial Adobe sont requis.",
+  "geoPdfError_metadataMismatch": "Métadonnées GeoPDF invalides : les tableaux GPTS/LPTS ont des longueurs différentes.",
+  "geoPdfError_insufficientControlPoints": "Les métadonnées GeoPDF contiennent trop peu de points de contrôle.",
+  "geoPdfError_canvasUnavailable": "Impossible de créer le canevas pour le rendu du PDF.",
+  "geoPdfError_canvasLimit": "Limite de taille du canevas dépassée. Sélectionnez une résolution inférieure.",
+  "geoPdfError_unsupportedResolution": "Résolution de rendu non prise en charge."
 })}}});
