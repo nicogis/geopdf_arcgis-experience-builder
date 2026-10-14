@@ -17,5 +17,11 @@ export default {
   statusLoadError: 'Unable to load GeoPDF: {details}',
   layerControlsTitle: 'Layer controls',
   layerVisibility: 'Visible',
-  layerOpacity: 'Opacity'
+  layerOpacity: 'Opacity',
+  geoPdfError_metadataMissing: "GeoPDF metadata not found. Expected GPTS/LPTS arrays in an Adobe geospatial PDF.",
+  geoPdfError_metadataMismatch: "Invalid GeoPDF metadata: GPTS/LPTS arrays have different lengths.",
+  geoPdfError_insufficientControlPoints: "GeoPDF metadata contains too few control points.",
+  geoPdfError_canvasUnavailable: "Unable to create a canvas for PDF rendering.",
+  geoPdfError_canvasLimit: "Canvas size limit exceeded. Select a lower resolution.",
+  geoPdfError_unsupportedResolution: "Unsupported rendering resolution."
 }
