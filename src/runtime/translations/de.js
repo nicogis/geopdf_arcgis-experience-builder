@@ -17,5 +17,11 @@ System.register([], function (_export) {return {execute: function () {_export({
   "statusLoadError": "GeoPDF konnte nicht geladen werden: {details}",
   "layerControlsTitle": "Layer-Steuerung",
   "layerVisibility": "Sichtbar",
-  "layerOpacity": "Deckkraft"
+  "layerOpacity": "Deckkraft",
+  "geoPdfError_metadataMissing": "GeoPDF-Metadaten nicht gefunden. GPTS/LPTS-Arrays eines Adobe-Geospatial-PDFs sind erforderlich.",
+  "geoPdfError_metadataMismatch": "Ungültige GeoPDF-Metadaten: Die GPTS/LPTS-Arrays haben unterschiedliche Längen.",
+  "geoPdfError_insufficientControlPoints": "Die GeoPDF-Metadaten enthalten zu wenige Kontrollpunkte.",
+  "geoPdfError_canvasUnavailable": "Canvas für die PDF-Darstellung konnte nicht erstellt werden.",
+  "geoPdfError_canvasLimit": "Canvas-Größenlimit überschritten. Wählen Sie eine niedrigere Auflösung.",
+  "geoPdfError_unsupportedResolution": "Nicht unterstützte Renderauflösung."
 })}}});
