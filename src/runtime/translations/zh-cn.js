@@ -17,5 +17,11 @@ System.register([], function (_export) {return {execute: function () {_export({
   "statusLoadError": "无法加载 GeoPDF：{details}",
   "layerControlsTitle": "图层控制",
   "layerVisibility": "可见",
-  "layerOpacity": "不透明度"
+  "layerOpacity": "不透明度",
+  "geoPdfError_metadataMissing": "未找到 GeoPDF 元数据。需要 Adobe 地理空间 PDF 中的 GPTS/LPTS 数组。",
+  "geoPdfError_metadataMismatch": "GeoPDF 元数据无效：GPTS/LPTS 数组长度不一致。",
+  "geoPdfError_insufficientControlPoints": "GeoPDF 元数据中的控制点数量不足。",
+  "geoPdfError_canvasUnavailable": "无法创建用于 PDF 渲染的画布。",
+  "geoPdfError_canvasLimit": "超出画布尺寸限制。请选择较低的分辨率。",
+  "geoPdfError_unsupportedResolution": "不支持的渲染分辨率。"
 })}}});
