@@ -5,7 +5,7 @@ import type { IMConfig } from '../config'
 import defaultMessages from './translations/default'
 import MapConnectionStatus from './components/map-connection-status'
 import UploadPlaceholder from './components/upload-placeholder'
-import { loadGeoPdfAsMediaLayer } from './services/geopdf-loader'
+import { GeoPdfError, loadGeoPdfAsMediaLayer } from './services/geopdf-loader'
 
 const Widget = (props: AllWidgetProps<IMConfig>) => {
   const translate = hooks.useTranslation(jimuCoreMessages, defaultMessages)
@@ -70,7 +70,9 @@ const Widget = (props: AllWidgetProps<IMConfig>) => {
 
       setStatusMessage(translate('statusLoaded'))
     } catch (error) {
-      const details = error instanceof Error ? error.message : translate('statusUnknownError')
+      const details = error instanceof GeoPdfError
+        ? translate(`geoPdfError_${error.code}`)
+        : error instanceof Error ? error.message : translate('statusUnknownError')
       setStatusMessage(translate('statusLoadError', { details }))
     } finally {
       setIsLoading(false)
