@@ -117,7 +117,7 @@ const extractGeoreference = (pdfText: string, width: number, height: number): Ge
   }
 }
 
-const renderFirstPageToImage = async (bytes: Uint8Array, workerUrl: string): Promise<GeoPdfRenderResult> => {
+const renderFirstPageToImage = async (bytes: Uint8Array, workerUrl: string, maxSize: number): Promise<GeoPdfRenderResult> => {
   // Experience Builder bundles widget modules as SystemJS modules. The PDF.js
   // webpack entry emits a System.register worker chunk, which cannot execute in
   // a standalone Web Worker ("System is not defined"). Load the original PDF.js
@@ -131,8 +131,7 @@ const renderFirstPageToImage = async (bytes: Uint8Array, workerUrl: string): Pro
   const page = await pdf.getPage(1)
 
   const baseViewport = page.getViewport({ scale: 1 })
-  const maxSize = 2048
-  const scale = Math.min(1, maxSize / Math.max(baseViewport.width, baseViewport.height))
+  const scale = maxSize / Math.max(baseViewport.width, baseViewport.height)
   const viewport = page.getViewport({ scale })
 
   const canvas = document.createElement('canvas')
@@ -150,6 +149,7 @@ const renderFirstPageToImage = async (bytes: Uint8Array, workerUrl: string): Pro
   }).promise
 
   const imageDataUrl = canvas.toDataURL('image/png')
+  if (imageDataUrl === 'data:,') throw new Error('Canvas limit exceeded. Select a lower resolution.')
   return {
     imageDataUrl,
     width: canvas.width,
@@ -157,12 +157,13 @@ const renderFirstPageToImage = async (bytes: Uint8Array, workerUrl: string): Pro
   }
 }
 
-export const loadGeoPdfAsMediaLayer = async (file: File, workerUrl: string): Promise<LoadedGeoPdf> => {
+export const loadGeoPdfAsMediaLayer = async (file: File, workerUrl: string, maxSize: number = 4096): Promise<LoadedGeoPdf> => {
   const buffer = await file.arrayBuffer()
   const bytes = new Uint8Array(buffer)
   const pdfText = new TextDecoder('latin1').decode(bytes)
 
-  const renderResult = await renderFirstPageToImage(bytes, workerUrl)
+  if (![2048, 4096, 8192].includes(maxSize)) throw new Error('Unsupported rendering resolution.')
+  const renderResult = await renderFirstPageToImage(bytes, workerUrl, maxSize)
   const georefResult = extractGeoreference(pdfText, renderResult.width, renderResult.height)
 
   const controlPoints = georefResult.controlPoints.map(point => ({
