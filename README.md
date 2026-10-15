@@ -124,6 +124,39 @@ To update an already registered widget, replace its hosted production files whil
 - [Add custom widgets to ArcGIS Enterprise](https://doc.arcgis.com/en/experience-builder/11.5/configure-widgets/add-custom-widgets.htm)
 - [Experience Builder release versions and compatibility](https://developers.arcgis.com/experience-builder/guide/release-versions/)
 
+## Widget settings: deployment URL and PDF resolution
+
+GeoPDF exposes two configurable properties in the **Experience Builder widget settings**:
+
+| Property | Default | Purpose |
+| --- | --- | --- |
+| **Widget deployment URL (optional)** (`widgetBaseUrl`) | Empty | Base HTTPS URL of the deployed widget folder, used to locate the PDF.js worker. Particularly important when the widget is externally hosted and registered in **ArcGIS Enterprise Portal**. |
+| **PDF rendering resolution** (`renderMaxSize`) | **4096 px** | Maximum width or height of the raster image produced from the first PDF page. Choose **2048**, **4096**, or **8192 px**. |
+
+### Widget deployment URL
+
+When the widget is registered in Portal but hosted externally (for example, on IIS), set **Widget deployment URL (optional)** to the HTTPS folder containing `manifest.json`, **not** the manifest URL itself:
+
+```text
+https://widgets.example.org/widget/geopdf/
+```
+
+The widget then loads its PDF.js worker from `https://widgets.example.org/widget/geopdf/dist/runtime/assets/pdf.worker.min.js`. This avoids incorrect worker URLs pointing to Portal's own CDN. For local development, or if Experience Builder already resolves the correct widget folder, leave the property empty. This property affects **worker asset resolution**, not the Portal registration or PDF file location.
+
+### PDF rendering resolution and performance
+
+| Maximum dimension | Trade-off | Suggested use |
+| --- | --- | --- |
+| **2048 px** | Fastest rendering and lowest memory consumption, but less detail when zooming. | Large or complex PDFs, lower-powered clients, initial troubleshooting. |
+| **4096 px (default)** | Balanced detail, processing time, and memory usage. | Recommended starting point. |
+| **8192 px** | Sharper thin lines and small text, but potentially much slower and more memory-intensive. | Detailed maps on sufficiently capable client devices. |
+
+The selected value is the **maximum image dimension**, not a DPI value or a fixed pixel count for both sides: the PDF page aspect ratio is preserved. Rendering is performed **in the user's browser** using PDF.js, so PDF page size, vector complexity, image content, device RAM, browser canvas limits, and GPU resources can all affect loading time and stability. An 8192 × 8192 RGBA canvas alone requires approximately **256 MiB** of raw pixel storage, before PDF.js, encoded images, graphics textures, and other allocations; real peak usage can be substantially higher.
+
+A larger setting can improve detail, but it **does not preserve the original PDF vectors**: the current implementation displays a single georeferenced raster image. Zooming beyond its effective resolution will still produce pixelation or blur. If 8192 px is insufficient, a future **zoom-dependent tiled rendering** approach would be needed to render smaller regions at appropriate detail levels, with additional implementation complexity for tiling, caching, and map synchronization.
+
+If a PDF loads slowly, the browser becomes unresponsive, or canvas rendering fails, try **4096 px or 2048 px**. Changes to resolution apply when the PDF is **loaded again**; an existing overlay is not automatically re-rendered.
+
 ## Supported files and limitations
 
 The current implementation targets **Adobe geospatial PDFs** containing `/GPTS` and `/LPTS` metadata. It does not support every format marketed as “GeoPDF”.
@@ -180,7 +213,7 @@ Experience Builder Developer Edition **1.13 and later** supports a widget-level 
 
 The paths are relative to the widget root at `client/your-extensions/widgets/geoPdf`. This expects `pdfjs-dist@3.11.174` to be installed in the Experience Builder `client/node_modules` directory.
 
-No PowerShell watcher or manual copying into generated build folders is required. By default, the widget obtains its hosted base URL from Experience Builder's `props.context.folderUrl`. When the optional **widget deployment URL** setting is populated, it overrides that base URL for the PDF.js worker. The worker is loaded from:
+The `copy-files.json` rule is intended to include the PDF.js worker during the Experience Builder build; verify the resulting asset in the compiled output. The PowerShell code fences in this README simply show commands that can be run in a terminal on Windows; **PowerShell is not a runtime dependency of the widget**. By default, the widget obtains its hosted base URL from Experience Builder's `props.context.folderUrl`. When the optional **widget deployment URL** setting is populated, it overrides that base URL for the PDF.js worker. The worker is loaded from:
 
 ```text
 <widget-folder-url>/dist/runtime/assets/pdf.worker.min.js
@@ -215,7 +248,7 @@ https://example.org/widgets/geoPdf/dist/runtime/widget.js
 https://example.org/widgets/geoPdf/dist/runtime/assets/pdf.worker.min.js
 ```
 
-Verify that the worker request returns **HTTP 200** with a JavaScript-compatible content type, then test a representative GeoPDF in the published experience. Static hosting such as IIS does not need a file-copy watcher.
+Verify that the worker request returns **HTTP 200** with a JavaScript-compatible content type, then test a representative GeoPDF in the published experience. Static hosting such as IIS serves the compiled assets directly. The PDF.js worker must be included in the deployed output.
 
 ## Troubleshooting
 
@@ -228,6 +261,8 @@ Verify that the worker request returns **HTTP 200** with a JavaScript-compatible
 | `System is not defined` | Use the standalone PDF.js worker, not a SystemJS-bundled worker. |
 | GeoPDF metadata not found | Check that the PDF contains supported Adobe `/GPTS` and `/LPTS` metadata. |
 | Worker missing after compilation | Verify `copy-files.json`, the installed PDF.js package, and the compiler output. |
+| PDF is blurry when zooming | Increase **PDF rendering resolution** to 4096 or 8192 px, then reload the PDF. A single raster overlay cannot retain vector sharpness at arbitrary zoom levels. |
+| Rendering is slow, memory usage is high, or the canvas fails | Lower **PDF rendering resolution** to 4096 or 2048 px and reload. Very large or complex PDFs may exceed browser/device limits. |
 | Local development works but hosted deployment fails | Check runtime script URLs, worker URL, HTTPS, content types, and browser console errors. |
 
 ## Contributing
