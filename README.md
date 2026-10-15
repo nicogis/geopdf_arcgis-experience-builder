@@ -265,6 +265,16 @@ Verify that the worker request returns **HTTP 200** with a JavaScript-compatible
 | Rendering is slow, memory usage is high, or the canvas fails | Lower **PDF rendering resolution** to 4096 or 2048 px and reload. Very large or complex PDFs may exceed browser/device limits. |
 | Local development works but hosted deployment fails | Check runtime script URLs, worker URL, HTTPS, content types, and browser console errors. |
 
+## Roadmap / TODO
+
+- [ ] **Zoom-dependent tiled GeoPDF rendering**: investigate replacing or complementing the current single-raster overlay with on-demand rendering of PDF regions at resolutions appropriate to the current map zoom. The goal is to improve the legibility of fine lines and labels at high zoom levels without rendering the entire PDF at 8192 px or more upfront.
+  - Determine how to georeference and align tiles with the ArcGIS map.
+  - Render only visible regions and update tiles when the map extent or zoom changes.
+  - Evaluate tile caching, memory usage, cancellation of obsolete rendering tasks, and client-side performance.
+  - Validate compatibility with ArcGIS Experience Builder and supported Adobe geospatial PDFs.
+
+  **Status:** Planned investigation; tiled rendering is not currently implemented.
+
 ## Contributing
 
 Bug reports, compatibility findings, reproducible GeoPDF samples, and pull requests are welcome. When reporting an issue, include the Experience Builder version, browser, relevant console errors, and whether the problem occurs in local development or a hosted deployment.
