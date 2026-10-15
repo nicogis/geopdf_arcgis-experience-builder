@@ -279,6 +279,12 @@ Verify that the worker request returns **HTTP 200** with a JavaScript-compatible
 
 Bug reports, compatibility findings, reproducible GeoPDF samples, and pull requests are welcome. When reporting an issue, include the Experience Builder version, browser, relevant console errors, and whether the problem occurs in local development or a hosted deployment.
 
-## License
+## License and third-party notices
 
-See the repository's license information and the licenses of third-party dependencies.
+Copyright 2026 NicoGIS.
+
+The GeoPDF widget source code is licensed under the **Apache License, Version 2.0**. See [LICENSE.txt](LICENSE.txt) for the full terms and [NOTICE](NOTICE) for project attribution and third-party information.
+
+**Mozilla PDF.js** (`pdfjs-dist@3.11.174`), used to render PDFs in the browser, is distributed under the **Apache License, Version 2.0** (not MIT). PDF.js and any bundled dependencies retain their own copyright and license notices. When redistributing a compiled widget that includes the PDF.js worker, preserve the applicable third-party license and notice information.
+
+**ArcGIS Experience Builder** and the **ArcGIS Maps SDK for JavaScript** are Esri products governed by their own terms. The Apache License of this repository does not change the license terms of those products.
