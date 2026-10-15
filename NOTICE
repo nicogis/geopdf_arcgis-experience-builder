@@ -1,0 +1,13 @@
+GeoPDF for ArcGIS Experience Builder
+Copyright 2026 NicoGIS
+
+This project is licensed under the Apache License, Version 2.0.
+See LICENSE.txt for the full license text.
+
+Third-party components retain their own copyrights and license terms.
+Mozilla PDF.js (pdfjs-dist 3.11.174) is licensed under the Apache License, Version 2.0.
+See the PDF.js distribution for its applicable license and notices.
+
+ArcGIS Experience Builder and the ArcGIS Maps SDK for JavaScript are Esri
+products subject to their respective license terms. They are not relicensed
+under this project's Apache License.
